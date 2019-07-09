@@ -1,47 +1,52 @@
-from os import mkdir, listdir, path, remove, rename
+"""
+[*] Description:
+    A tool to collect images from Windows Spotlight feature;
+    This done by 
+"""
+import os
 import shutil
+import pathlib
 
 from PIL import Image
 
 
-def get_res(img_path):
+def matchResolution(img_path):
     im = Image.open(img_path)
-    return im.size
+    return im.size == (1920, 1080)
 
 
-def main():
-    assets = 'C:\\Users\\Handler\\AppData\\Local\\Packages\\Microsoft.Windows.ContentDeliveryManager_cw5n1h2txyewy\\LocalState\\Assets'
+class WinMage:
+    IMG_DIR = pathlib.WindowsPath('.\\img')
 
-    new = 'temp'
-    c = 0
+    def __init__(self):
+        if not self.IMG_DIR.exists():
+            self.IMG_DIR.mkdir()
+        
+        self.locateAssetsDir()
+        c_new = self.collectImages()
+        print('[+] Added %d images' % c_new)
 
-    try:
-        mkdir(new)
-    except FileExistsError:
-        pass
+    def locateAssetsDir(self):
+        self.assets_dir = pathlib.WindowsPath(
+            f'C:\\Users\\{os.getlogin()}\\AppData\\Local\\Packages\\Microsoft.Windows.ContentDeliveryManager_cw5n1h2txyewy\\LocalState\\Assets')
+        if not self.assets_dir.exists():
+            print('[X] No Spotlight directory found!')
+            exit(2)
 
-    for fn in listdir(assets):
-        src = path.join(assets, fn)
-        dst = path.join(new, fn + '.jpg')
-        shutil.copy2(src, dst)
-    for n in listdir(new):
-        fn = path.join(new, n)
-        w, h = get_res(fn)
-        if w != 1920 and h != 1080:
-            remove(fn)
-        else:
-            try:
-                rename(fn, path.join('img', n))
+    def collectImages(self):
+        c = 0
+        for fn in os.listdir(self.assets_dir):
+            asset_path = self.assets_dir / fn
+            target_path = self.IMG_DIR / (fn + '.jpg')
+
+            if target_path.exists():
+                continue
+
+            if matchResolution(asset_path):
+                shutil.copy2(asset_path, target_path)
                 c += 1
-            except FileExistsError:
-                pass
-    print('Added %d images' % c)
-
-    try:
-        shutil.rmtree(new)
-    except:
-        print('ERROR Couldnt remove temp directory!')
+        return c
 
 
 if __name__ == '__main__':
-    main()
+    WinMage()
