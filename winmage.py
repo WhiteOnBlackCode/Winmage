@@ -4,40 +4,30 @@
     This done by 
 """
 import os
-import shutil
 import pathlib
+import shutil
 
-from PIL import Image
-
-
-def matchResolution(img_path):
-    im = Image.open(img_path)
-    return im.size == (1920, 1080)
+from src import *
 
 
 class WinMage:
-    IMG_DIR = pathlib.WindowsPath('.\\img')
-
     def __init__(self):
-        if not self.IMG_DIR.exists():
-            self.IMG_DIR.mkdir()
-        
-        self.locateAssetsDir()
-        c_new = self.collectImages()
-        print('[+] Added %d images' % c_new)
+        self.conf = Config()['DEFAULT']
 
-    def locateAssetsDir(self):
         self.assets_dir = pathlib.WindowsPath(
             f'C:\\Users\\{os.getlogin()}\\AppData\\Local\\Packages\\Microsoft.Windows.ContentDeliveryManager_cw5n1h2txyewy\\LocalState\\Assets')
         if not self.assets_dir.exists():
             print('[X] No Spotlight directory found!')
             exit(2)
 
+        c_new = self.collectImages()
+        print('[+] Added %d images' % c_new)
+
     def collectImages(self):
         c = 0
-        for fn in os.listdir(self.assets_dir):
+        for fn in os.listdir(str(self.assets_dir)):
             asset_path = self.assets_dir / fn
-            target_path = self.IMG_DIR / (fn + '.jpg')
+            target_path = pathlib.WindowsPath(self.conf['img_dir']) / (fn + '.jpg')
 
             if target_path.exists():
                 continue
