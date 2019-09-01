@@ -26,7 +26,6 @@ class WinMage:
     def __init__(self):
         self.args = parse_args()
         self.config = Config()
-        self.section = self.config[self.config.default_section]
 
         if not self.args.force and not self.config.should_run():
             log.warning('Already ran today!')
@@ -47,12 +46,12 @@ class WinMage:
         for fn in os.listdir(str(self.assets_dir)):
             asset_path = self.assets_dir / fn
             target_path = pathlib.WindowsPath(
-                self.section['img_dir']) / (fn + '.jpg')
+                self.config['img_dir']) / (fn + '.jpg')
 
             if target_path.exists():
                 continue
 
-            if matchResolution(asset_path):
+            if matchResolution(asset_path, self.config['scr_width'], self.config['scr_height']):
                 shutil.copy2(asset_path, target_path)
                 c += 1
         return c
