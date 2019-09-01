@@ -1,3 +1,3 @@
 @echo off
-python .\winmage.py
-PAUSE
+cd %~dp0
+.\venv\Scripts\python.exe .\winmage.py
