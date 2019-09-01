@@ -38,7 +38,7 @@ class Config(dict):
         self['last_day'] = date.today().isoformat()
 
         with CONF_PATH.open('w') as f:
-            json.dump(self, f)
+            json.dump(self, f, indent=4)
 
     def should_run(self) -> bool:
         last_day = date.fromisoformat(self['last_day'])
