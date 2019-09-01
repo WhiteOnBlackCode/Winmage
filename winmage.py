@@ -7,8 +7,12 @@ import os
 import pathlib
 import shutil
 from datetime import date, timedelta
+import logging as log
 
 from src import *
+
+log.basicConfig(filename='log.txt', level=log.INFO,
+                format='%(asctime)s::%(levelname)s::%(message)s', datefmt='%H:%M:%S')
 
 
 def parse_args():
@@ -25,16 +29,17 @@ class WinMage:
         self.section = self.config[self.config.default_section]
 
         if not self.args.force and not self.config.should_run():
-            exit('[!] Already ran today!')
+            log.warning('Already ran today!')
+            exit(1)
 
         self.assets_dir = pathlib.WindowsPath(
             f'C:\\Users\\{os.getlogin()}\\AppData\\Local\\Packages\\Microsoft.Windows.ContentDeliveryManager_cw5n1h2txyewy\\LocalState\\Assets')
         if not self.assets_dir.exists():
-            print('[X] No Spotlight directory found!')
+            log.err('No Spotlight directory found!')
             exit(2)
 
         c_new = self.collect_images()
-        print('[+] Added %d images' % c_new)
+        log.info('Added %d images' % c_new)
         self.config.save()
 
     def collect_images(self):

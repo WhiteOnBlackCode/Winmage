@@ -23,7 +23,6 @@ class Config(configparser.ConfigParser):
             img_dir.mkdir()
 
     def generate(self):
-        print('[+] Generating config.ini')
         self[self.default_section] = {'img_dir': DEF_IMG_DIR.resolve(),
                                       'last_day': date.today().isoformat()}
         self.save()
