@@ -2,8 +2,7 @@
 /log.txt
 /img/
 
-*.pyc
-/venv/
+**/*.pyc
 
 /.vscode/
 /.idea/
