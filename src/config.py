@@ -1,6 +1,9 @@
 import json
 import pathlib
 from datetime import date, timedelta
+import logging
+
+log = logging.getLogger('root')
 
 CONF_PATH = pathlib.WindowsPath('.') / 'config.json'
 DEF_IMG_DIR = pathlib.WindowsPath('.') / 'img'
@@ -17,7 +20,7 @@ class Config(dict):
         if CONF_PATH.is_file():
             try:
                 with CONF_PATH.open() as f:
-                    json.load(f)
+                    self.update(json.load(f))
                 if [x for x in DEF_CONF if x not in self]:
                     self.generate()
             except json.JSONDecodeError:
@@ -25,11 +28,13 @@ class Config(dict):
         else:
             self.generate()
 
+        # Self now should be prepared
         img_dir = pathlib.WindowsPath(self['img_dir'])
         if not img_dir.exists():
             img_dir.mkdir()
 
     def generate(self):
+        log.info('Generating config')
         self.clear()
         self.update(DEF_CONF)
         self.save()
