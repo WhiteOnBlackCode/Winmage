@@ -3,6 +3,7 @@
 /img/
 
 **/*.pyc
+/venv/
 
 /.vscode/
 /.idea/
