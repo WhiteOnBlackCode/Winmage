@@ -9,6 +9,8 @@ import shutil
 from datetime import date, timedelta
 import logging as log
 
+from win10toast import ToastNotifier
+
 from src import *
 
 log.basicConfig(filename='log.txt', level=log.INFO,
@@ -38,7 +40,12 @@ class WinMage:
             exit(2)
 
         c_new = self.collect_images()
-        log.info('Added %d images' % c_new)
+        if not c_new:
+            log.info('Nothing added this time')
+        else:
+            log.info('Added %d images' % c_new)
+            toaster = ToastNotifier()
+            toaster.show_toast("Winmage", "Added %d images!" % c_new)
         self.config.save()
 
     def collect_images(self):

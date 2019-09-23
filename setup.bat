@@ -1,8 +1,12 @@
 :: This script requires 'python' and 'virtualenv' to be in path!
-@echo off
-cd %~dp0
-mkdir .\venv
-virtualenv .\venv
-.\venv\Scripts\pip.exe install Pillow
+:: TODO: Check already installed state and fix broken/uncomplete installation
+:: TODO: Prompt to add a link to system startup folder
+:: TODO: Check windows version if less than 10 then skip win10toast installation
 
-pause
+@echo off
+echo *********************************************
+echo * Please wait until this window will close! *
+echo *********************************************
+cd %~dp0
+
+pipenv install
