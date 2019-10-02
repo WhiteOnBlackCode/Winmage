@@ -9,4 +9,4 @@ echo * Please wait until this window will close! *
 echo *********************************************
 cd %~dp0
 
-pipenv install
+pipenv install win10toast Pillow
