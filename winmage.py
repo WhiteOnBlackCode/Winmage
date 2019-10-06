@@ -43,13 +43,15 @@ class WinMage:
         if not c_new:
             log.info('Nothing added this time')
         else:
-            log.info('Added %d images' % c_new)
+            log.info('Added %d new images:' % len(c_new))
+            for i in c_new:
+                log.info('New img #%d: %s' % (c_new.index(i) + 1, i))
             toaster = ToastNotifier()
-            toaster.show_toast("Winmage", "Added %d images!" % c_new)
+            toaster.show_toast("Winmage", "Added %d images!" % len(c_new))
         self.config.save()
 
     def collect_images(self):
-        c = 0
+        c = []
         for fn in os.listdir(str(self.assets_dir)):
             asset_path = self.assets_dir / fn
             target_path = pathlib.WindowsPath(
@@ -60,7 +62,7 @@ class WinMage:
 
             if matchResolution(asset_path, self.config['scr_width'], self.config['scr_height']):
                 shutil.copy2(asset_path, target_path)
-                c += 1
+                c.append(fn)
         return c
 
 
