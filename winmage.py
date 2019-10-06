@@ -43,11 +43,11 @@ class WinMage:
         if not c_new:
             log.info('Nothing added this time')
         else:
-            log.info('Added %d new images:' % len(c_new))
+            log.info(f'Added {len(c_new)} new images:')
             for i in c_new:
-                log.info('New img #%d: %s' % (c_new.index(i) + 1, i))
+                log.info(f'New img #{c_new.index(i) + 1}: {i}')
             toaster = ToastNotifier()
-            toaster.show_toast("Winmage", "Added %d images!" % len(c_new))
+            toaster.show_toast(f"Winmage", "Added {len(c_new)} images!")
         self.config.save()
 
     def collect_images(self):
