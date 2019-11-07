@@ -25,6 +25,9 @@ def parse_args():
 
 
 class WinMage:
+    assets_dir = pathlib.WindowsPath(
+        f'C:\\Users\\{os.getlogin()}\\AppData\\Local\\Packages\\Microsoft.Windows.ContentDeliveryManager_cw5n1h2txyewy\\LocalState\\Assets')
+
     def __init__(self):
         self.args = parse_args()
         self.config = Config()
@@ -33,22 +36,24 @@ class WinMage:
             log.warning('Already ran today!')
             exit(1)
 
-        self.assets_dir = pathlib.WindowsPath(
-            f'C:\\Users\\{os.getlogin()}\\AppData\\Local\\Packages\\Microsoft.Windows.ContentDeliveryManager_cw5n1h2txyewy\\LocalState\\Assets')
         if not self.assets_dir.exists():  # pragma: no cover
             log.error('No Spotlight directory found!')
             exit(2)
 
-        c_new = self.collect_images()
-        if not c_new:
-            log.info('Nothing added this time')  # pragma: no cover
-        else:
-            log.info(f'Added {len(c_new)} new images:')
-            for i in c_new:
-                log.info(f'New img #{c_new.index(i) + 1}: {i}')
-            toaster = ToastNotifier()
-            toaster.show_toast("Winmage", f"Added {len(c_new)} images!")
+        self.perform()
         self.config.save()
+
+    def perform(self):
+        c_new = self.collect_images()
+        if not c_new:  # pragma: no cover
+            log.info('Nothing added this time')
+            return
+
+        log.info(f'Added {len(c_new)} new images:')
+        for i in c_new:
+            log.info(f'New img #{c_new.index(i) + 1}: {i}')
+        toaster = ToastNotifier()
+        toaster.show_toast("Winmage", f"Added {len(c_new)} images!")
 
     def collect_images(self):
         c = []
