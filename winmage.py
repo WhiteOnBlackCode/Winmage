@@ -6,7 +6,6 @@
 import os
 import pathlib
 import shutil
-from datetime import date
 import logging as log
 
 from win10toast import ToastNotifier
