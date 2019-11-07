@@ -16,24 +16,27 @@ class Config(dict):
     def __init__(self):
         super(Config, self).__init__()
         self.generated = False
-
-        # Loading
-        if CONF_PATH.is_file():
-            try:
-                with CONF_PATH.open() as f:
-                    self.update(json.load(f))
-                # Check existance of config keys
-                if [x for x in DEFAULT_CONF if x not in self]:
-                    self.generate()  # pragma: no cover
-            except json.JSONDecodeError:  # pragma: no cover
-                self.generate()
-        else:
-            self.generate()  # pragma: no cover
+        self.load()
 
         # Self now should be prepared by now
         img_dir = pathlib.WindowsPath(self['img_dir'])
         if not img_dir.exists():  # pragma: no cover
             img_dir.mkdir()
+
+    def load(self):
+        if not CONF_PATH.is_file():
+            return self.generate()  # pragma: no cover
+
+        try:
+            with CONF_PATH.open() as f:
+                self.update(json.load(f))
+
+            # Verify config keys
+            if [x for x in DEFAULT_CONF if x not in self]:
+                self.generate()  # pragma: no cover
+
+        except json.JSONDecodeError:  # pragma: no cover
+            self.generate()
 
     def generate(self):  # pragma: no cover
         log.info('Generating config')
