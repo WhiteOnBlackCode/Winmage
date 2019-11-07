@@ -1,0 +1,2 @@
+* Add date to logging time format
+* Check why the fuck it doesnt work (works only with -f)

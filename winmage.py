@@ -1,12 +1,12 @@
 """
 [*] Description:
     A tool to collect images from Windows Spotlight feature;
-    This done by 
+    This done by...
 """
 import os
 import pathlib
 import shutil
-from datetime import date, timedelta
+from datetime import date
 import logging as log
 
 from win10toast import ToastNotifier
@@ -29,19 +29,19 @@ class WinMage:
         self.args = parse_args()
         self.config = Config()
 
-        if not self.args.force and not self.config.should_run():
+        if not self.args.force and not self.config.should_run():  # pragma: no cover
             log.warning('Already ran today!')
             exit(1)
 
         self.assets_dir = pathlib.WindowsPath(
             f'C:\\Users\\{os.getlogin()}\\AppData\\Local\\Packages\\Microsoft.Windows.ContentDeliveryManager_cw5n1h2txyewy\\LocalState\\Assets')
-        if not self.assets_dir.exists():
-            log.err('No Spotlight directory found!')
+        if not self.assets_dir.exists():  # pragma: no cover
+            log.error('No Spotlight directory found!')
             exit(2)
 
         c_new = self.collect_images()
         if not c_new:
-            log.info('Nothing added this time')
+            log.info('Nothing added this time')  # pragma: no cover
         else:
             log.info(f'Added {len(c_new)} new images:')
             for i in c_new:
