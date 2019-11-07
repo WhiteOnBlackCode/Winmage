@@ -6,8 +6,6 @@ verify_ssl = true
 [dev-packages]
 autopep8 = "*"
 pylint = "*"
-coverage = "*"
-codacy-coverage = "*"
 
 [packages]
 pillow = "*"

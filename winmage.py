@@ -31,11 +31,11 @@ class WinMage:
         self.args = parse_args()
         self.config = Config()
 
-        if not self.args.force and not self.config.should_run():  # pragma: no cover
+        if not self.args.force and not self.config.should_run():
             log.warning('Already ran today!')
             exit(1)
 
-        if not self.assets_dir.exists():  # pragma: no cover
+        if not self.assets_dir.exists():
             log.error('No Spotlight directory found!')
             exit(2)
 
@@ -44,7 +44,7 @@ class WinMage:
 
     def perform(self):
         c_new = self.collect_images()
-        if not c_new:  # pragma: no cover
+        if not c_new:
             log.info('Nothing added this time')
             return
 

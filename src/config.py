@@ -20,12 +20,12 @@ class Config(dict):
 
         # Self now should be prepared by now
         img_dir = pathlib.WindowsPath(self['img_dir'])
-        if not img_dir.exists():  # pragma: no cover
+        if not img_dir.exists():
             img_dir.mkdir()
 
     def load(self):
         if not CONF_PATH.is_file():
-            return self.generate()  # pragma: no cover
+            return self.generate()
 
         try:
             with CONF_PATH.open() as f:
@@ -33,12 +33,12 @@ class Config(dict):
 
             # Verify config keys
             if [x for x in DEFAULT_CONF if x not in self]:
-                self.generate()  # pragma: no cover
+                self.generate()
 
-        except json.JSONDecodeError:  # pragma: no cover
+        except json.JSONDecodeError:
             self.generate()
 
-    def generate(self):  # pragma: no cover
+    def generate(self):
         log.info('Generating config')
         self.clear()
         self.update(DEFAULT_CONF)
@@ -52,7 +52,7 @@ class Config(dict):
         with CONF_PATH.open('w') as f:
             json.dump(self, f, indent=4)
 
-    def should_run(self) -> bool:  # pragma: no cover
+    def should_run(self) -> bool:
         if self.generated:
             return True
         last_day = date.fromisoformat(self['last_day'])
