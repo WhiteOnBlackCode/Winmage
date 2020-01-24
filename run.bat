@@ -1,4 +1,3 @@
 @echo off
 cd %~dp0
-pipenv run python .\winmage.py
-:: TODO Run without a window
+.\venv\Scripts\python.exe .\winmage.py

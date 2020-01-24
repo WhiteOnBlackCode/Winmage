@@ -9,4 +9,5 @@ echo * Please wait until this window will close! *
 echo *********************************************
 cd %~dp0
 
-pipenv install win10toast Pillow
+virtualenv venv
+.\venv\Scripts\pip.exe install win10toast Pillow
