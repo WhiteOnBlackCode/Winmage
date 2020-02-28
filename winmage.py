@@ -23,9 +23,14 @@ def parse_args():
     return parser.parse_args()
 
 
+def locate_assets_dir():
+    assets_dir = pathlib.Path.home() / 'AppData\\Local\\Packages'
+    for i in os.listdir(assets_dir):
+        if i.startswith('Microsoft.Windows.ContentDeliveryManager'):
+            return assets_dir / i / 'LocalState\\Assets'
+
 class WinMage:
-    assets_dir = pathlib.WindowsPath(
-        f'C:\\Users\\{os.getlogin()}\\AppData\\Local\\Packages\\Microsoft.Windows.ContentDeliveryManager_cw5n1h2txyewy\\LocalState\\Assets')
+    assets_dir = locate_assets_dir()
 
     def __init__(self):
         self.args = parse_args()
